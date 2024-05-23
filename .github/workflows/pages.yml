@@ -43,7 +43,7 @@ jobs:
           git config --global user.email '1254651108@qq.com'
           
       - name: Build
-        run: npm run build
+        run: sudo npm run build
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
