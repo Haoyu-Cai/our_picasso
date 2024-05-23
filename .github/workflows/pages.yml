@@ -3,36 +3,48 @@ name: Pages
 on:
   push:
     branches:
-      - main  # default branch
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           # If your repository depends on submodule, please see: https://github.com/actions/checkout
           submodules: recursive
       - name: Use Node.js 20
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@main
         with:
-          # Examples: 20, 18.19, >=16.20.2, lts/Iron, lts/Hydrogen, *, latest, current, node
-          # Ref: https://github.com/actions/setup-node#supported-version-syntax
           node-version: '20'
       - name: Cache NPM dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@main
         with:
           path: node_modules
           key: ${{ runner.OS }}-npm-cache
           restore-keys: |
             ${{ runner.OS }}-npm-cache
+      - name: Configuration environment
+        env:
+          HEXO_DEPLOY_SECRET: ${{secrets.HEXO_DEPLOY_SECRET}}
+        run: |
+          # 配置私钥，否则无法访问部署库，提示 git@github.com: Permission denied (publickey).
+          mkdir -p ~/.ssh/
+          echo "$HEXO_DEPLOY_SECRET" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+          # 设置用户名和邮箱，否则提示 Please tell me who you are.
+          git config --global user.name $GIT_USER
+          git config --global user.email $GIT_EMAIL
+          
       - name: Install Dependencies
         run: npm install
       - name: Build
         run: npm run build
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@main
         with:
           path: ./public
   deploy:
@@ -47,4 +59,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@main
