@@ -31,6 +31,15 @@ jobs:
         uses: actions/upload-pages-artifact@main
         with:
           path: ./public
+          
+      - name: Configuration environment
+        env:
+          HEXO_DEPLOY_SECRET: ${{secrets.HEXO_DEPLOY_SECRET}}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$HEXO_DEPLOY_SECRET" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
   deploy:
     needs: build
     permissions:
