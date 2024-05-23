@@ -23,20 +23,6 @@ jobs:
           key: ${{ runner.OS }}-npm-cache
           restore-keys: |
             ${{ runner.OS }}-npm-cache
-      - name: Configuration environment
-        env:
-          HEXO_DEPLOY_SECRET: ${{secrets.HEXO_DEPLOY_SECRET}}
-        run: |
-          # 配置私钥，否则无法访问部署库，提示 git@github.com: Permission denied (publickey).
-          mkdir -p ~/.ssh/
-          echo "$HEXO_DEPLOY_SECRET" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-          # 设置用户名和邮箱，否则提示 Please tell me who you are.
-          git config --global user.name $GIT_USER
-          git config --global user.email $GIT_EMAIL
-          
       - name: Install Dependencies
         run: npm install
       - name: Build
