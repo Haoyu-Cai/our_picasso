@@ -35,11 +35,16 @@ jobs:
       - name: Configuration environment
         env:
           HEXO_DEPLOY_SECRET: ${{secrets.HEXO_DEPLOY_SECRET}}
+          GIT_USERNAME: ${{ github.repository_owner }} 
+          GIT_EMAIL: ${{ github.repository_owner }}@user.github.com
         run: |
+          sudo timedatectl set-timezone "Asia/Shanghai"
           mkdir -p ~/.ssh/
           echo "$HEXO_DEPLOY_SECRET" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git config --global user.name '$HEXO_DEPLOY_SECRET'
+          git config --global user.email '$HEXO_DEPLOY_SECRET'
   deploy:
     needs: build
     permissions:
