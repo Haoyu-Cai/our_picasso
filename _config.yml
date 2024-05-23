@@ -101,8 +101,8 @@ theme: landscape
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: ""
-  # type: git
-  # repository: https://github.com/Haoyu-Cai/our_picasso
-  # branch: gh-pages
+  # type: ""
+  type: git
+  repository: https://github.com/Haoyu-Cai/our_picasso
+  branch: gh-pages
 
