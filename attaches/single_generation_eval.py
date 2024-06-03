@@ -214,12 +214,10 @@ if __name__ == "__main__":
     if ex_name in [ "TSconesP_Q", "DreamBooth",  "SVDiff", "TI", "Cones"]:
         # checkpoint_num = [ '/checkpoint-' + str(i) for i in checkpoint_num]
         eval_datas( my_dict1, my_dict2, path, source, dir1, dir2, checkpoint_num)
-        # NOTE(beixue): save = False 平均处理后的数据, save = True 表明处理数据
         eval_datas( my_dict1, my_dict2, path, source, dir1, dir2, checkpoint_num, save=False)
     elif ex_name == "TSconesP":
         checkpoint_num = [(i+1)*300 for i in range(5)]
         eval_datas( my_dict1, my_dict2, path, source, dir1, dir2, checkpoint_num)
-        # NOTE(beixue): save = False 平均处理后的数据, save = True 表明处理数据
         eval_datas( my_dict1, my_dict2, path, source, dir1, dir2, checkpoint_num, save=False)
     elif baseline[choice] == "XTI":
 
